@@ -28,7 +28,7 @@ After downloading it, place it in /dataset .
 <img width="915" alt="Screenshot 2025-04-25 at 08 33 55" src="https://github.com/user-attachments/assets/b8e13df7-103a-4de9-82c6-d02a1d58a5e0" />
 
 <div align="center">
-  <img width="915" alt="Screenshot 2025-04-25 at 08 33 55" src="https://github.com/user-attachments/assets/b8e13df7-103a-4de9-82c6-d02a1d58a5e0" />
+Preview of the dataset
 </div>
 
 ## Reference
