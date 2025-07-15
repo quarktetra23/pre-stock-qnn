@@ -16,7 +16,6 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from sklearn.metrics import f1_score
-import matplotlib.pyplot as plt
 
 # === Dataset Path Builder ===
 def get_dataset_path(base, mode, norm, split, fold):
@@ -133,7 +132,9 @@ def train(model, loader, epochs):
         for xb, yb in loader:
             opt.zero_grad()
             out = model(xb)
-            loss = sum(loss_fn(out[:, i], yb[:, i]) for i in range(5))  
+            # Use torch.stack to sum tensor losses, not Python int
+            losses = [loss_fn(out[:, i], yb[:, i]) for i in range(5)]
+            loss = torch.stack(losses).sum()
             loss.backward()
             opt.step()
 
@@ -193,7 +194,8 @@ def run_manual():
             test_ds = BenchmarkDataset(test_path)
 
             model = QuantumAttentionNet()
-            train(model, DataLoader(train_ds, batch_size=32, shuffle=True, num_workers=2), epochs=EPOCHS)
+            # While using macOS, num_workers > 0 caused me issues. Set to 0 for compatibility.
+            train(model, DataLoader(train_ds, batch_size=32, shuffle=True, num_workers=0), epochs=EPOCHS)
             predictions = evaluate(model, DataLoader(test_ds, batch_size=32))
             y_true = np.loadtxt(test_path).T[:, 144:149].astype(int) - 1
             f1s = [f1_score(y_true[:, i], predictions[:, i], average='macro') for i in range(5)]
