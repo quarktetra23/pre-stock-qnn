@@ -12,10 +12,13 @@ def get_dataset_path(base, mode, norm, split, fold):
     return os.path.join(base, mode, norm, folder, filename)
 
 class BenchmarkDataset(Dataset):
-    def __init__(self, path):
+    def __init__(self, path, device=None):
         raw = np.loadtxt(path).T
-        self.X = torch.tensor(raw[:, :144], dtype=torch.float32)
-        self.y = torch.tensor(raw[:, 144:149].astype(int) - 1, dtype=torch.long)
+        if device is None:
+            device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.X = torch.tensor(raw[:, :144], dtype=torch.float32).to(device)
+        self.y = torch.tensor(raw[:, 144:149].astype(int) - 1, dtype=torch.long).to(device)
+        self.device = device
 
     def __len__(self):
         return len(self.X)
