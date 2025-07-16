@@ -13,7 +13,8 @@ def train(model, loader, epochs):
             try:
                 xb = xb.to(device)
                 yb = yb.to(device)
-                # Input validation and shape checks
+                
+                
                 if xb.ndim != 2 or xb.shape[1] != 144:
                     raise ValueError(f"Input xb shape mismatch: expected (?, 144), got {xb.shape}")
                 if yb.ndim != 2 or yb.shape[1] != 5:
